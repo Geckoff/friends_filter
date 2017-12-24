@@ -463,7 +463,7 @@ document.getElementById('savelist').addEventListener('click', () => {
 
 // VK core functions
 VK.init({
-    apiId: 6299151
+    apiId: 6309277
 });
 
 function auth() {
