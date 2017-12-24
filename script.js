@@ -1,3 +1,4 @@
+require("babel-polyfill");
 var friendsListTemplate = require("./friends.handlebars");
 var cyrillicToTranslit = require('cyrillic-to-translit-js');
 var jsCookie = require('js-cookie');
@@ -56,22 +57,42 @@ contentBlock.addEventListener('click', (e) => {
 });
 
 // list item dnd
-unlistedFriendsListNode.addEventListener('dragstart', (e) => {
-	if (e.target.tagName === 'LI') {	
-		e.dataTransfer.setData('text/plain', e.target.dataset.id);
-	}
-});
+function setListenersForLists(ulList) {
+	ulList.addEventListener('dragstart', (e) => {
+		if (e.target.tagName === 'LI') {	
+			let id = e.target.dataset.id;
+			let type = e.target.parentNode.parentNode.id;
+			let transferObj = {
+				id: id,
+				type: type
+			}
+			let jsonTransferObj = JSON.stringify(transferObj);
+			e.dataTransfer.setData('text/plain', jsonTransferObj);
+		}
+	});
 
-listedFriendsListNode.addEventListener('dragover', (e) => {
-	e.preventDefault();
-});
+	ulList.addEventListener('dragover', (e) => {
+		e.preventDefault();
+	});
 
-listedFriendsListNode.addEventListener('drop', (e) => {
-	e.preventDefault();
-	let id = e.dataTransfer.getData('text/plain');
-	listedIdsList.push(parseInt(id));
-	columnsLayout();		
-});
+	ulList.addEventListener('drop', (e) => {
+		e.preventDefault();
+		let dataObj = JSON.parse(e.dataTransfer.getData('text/plain'));
+		let friendId = parseInt(dataObj.id);
+		let listType = dataObj.type;
+
+		if (listType !== e.currentTarget.parentNode.id) {
+			console.log('test');
+			if (listedIdsList.indexOf(friendId) == -1) {
+				listedIdsList.push(parseInt(friendId));
+			} else {
+				listedIdsList.splice(listedIdsList.indexOf(parseInt(friendId)), 1);	
+			}
+			columnsLayout();
+		}		
+	});	
+}
+
 
 // search fields
 document.querySelector('.header-bottom').addEventListener('keyup', (e) => {
@@ -150,9 +171,10 @@ function sortFriends(elemFn) {
 function sortFriendsBySearchTerm(searchTerm) {
 	searchTerm = searchTerm.toLowerCase();
 	return (item) => {
-		if (item.first_name.toLowerCase().indexOf(searchTerm) !== -1 
-			|| item.last_name.toLowerCase().indexOf(searchTerm) !== -1 
-			|| searchTerm.length === 0) {
+		let fullName = `${item.first_name} ${item.last_name}`;
+
+		fullName = fullName.toLowerCase();
+		if (fullName.indexOf(searchTerm) !== -1 || searchTerm.length === 0) {
 			return true;
 		}
 		return false;
@@ -226,6 +248,8 @@ async function vkInit(rigthAway){
 			return item.uid;
 		});
 
+		setListenersForLists(unlistedFriendsListNode);
+		setListenersForLists(listedFriendsListNode);
 		await columnsLayoutPromise();
 		contentBlock.classList.add('loaded');	
 		document.getElementById('auth-button').classList.remove('loading');

@@ -10,16 +10,16 @@ module.exports = {
                 test: /\.handlebars$/, 
                 loader: "handlebars-loader" 
             },
-            // {
-            //     test: /\.js$/,
-            //     exclude: /(node_modules|bower_components)/,
-            //     use: {
-            //         loader: 'babel-loader',
-            //         options: {
-            //             presets: ['es2015']
-            //         }
-            //     }
-            // }
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['es2015']
+                    }
+                }
+            }
         ]
     }
 };
