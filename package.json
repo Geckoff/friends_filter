@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/Geckoff/friends_filter#readme",
   "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
     "cyrillic-to-translit-js": "^2.0.0",
     "handlebars": "^4.0.11",
     "handlebars-loader": "^1.6.0",

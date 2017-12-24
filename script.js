@@ -44,11 +44,11 @@ document.getElementById('logout').addEventListener('click', () => {
 
 // click on add/remove button in list item
 contentBlock.addEventListener('click', (e) => {
-	if (e.target.classList[0] === 'add' || e.path[2].classList[0] === 'add' || e.path[1].classList[0] === 'add') {
+	if (e.target.classList[0] === 'add' || e.target.parentNode.parentNode.classList[0] === 'add' || e.target.parentNode.classList[0] === 'add') {
 		let elementToAdd = e.target.closest('li');
 		listedIdsList.push(parseInt(elementToAdd.dataset.id));
 		columnsLayout();
-	} else if (e.target.classList[0] === 'remove' || e.path[2].classList[0] === 'remove' || e.path[1].classList[0] === 'remove') {
+	} else if (e.target.classList[0] === 'remove' || e.target.parentNode.classList[0] === 'remove' || e.target.parentNode.parentNode.classList[0] === 'remove') {
 		let elementToRemove = e.target.closest('li');
 		listedIdsList.splice(listedIdsList.indexOf(parseInt(elementToRemove.dataset.id)), 1);
 		columnsLayout();
