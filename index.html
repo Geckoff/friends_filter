@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.1/js/all.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,500" rel="stylesheet"> 
+    <script src="https://vk.com/js/api/openapi.js" type="text/javascript"></script>   
+     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+</head>
+<body>
+	<div class="container">
+		<div id="filter">
+			<div class="header">
+				<div class="header-top">
+					<h2>Pick a friend</h2>
+					<span id="logout"><i class="fas fa-times"></i></span>	
+				</div>
+				<div class="header-bottom">
+					<input placeholder="Search All Friends" type="text" id="search-all-friends">
+					<input placeholder="Search Listed Friend" type="text" id="search-picked-friends">
+				</div>
+			</div>
+			<div class="content">
+				<div id="all-friends">
+					<h3>All friends</h3>
+					<i class="fas fa-spinner fa-pulse filter-spinner"></i>
+					<ul></ul>
+				</div>
+				<div id="picked-friends">
+					<h3>Listed friends</h3>
+					<i class="fas fa-spinner fa-pulse"></i>
+					<ul></ul>
+				</div>
+			</div>
+			<div class="footer">
+				<button id="savelist">Save</button>
+			</div>
+		</div>		
+	</div>
+	<div class="container">
+		<h1 id="logo">Friends Filter</h1>
+	</div>
+	<div class="container">
+		<button id="auth-button"><i class="fas fa-spinner fa-pulse filter-spinner"></i><span>Authorize With VK.COM</span></button>	
+	</div>
+	
+<script src="bundle.js"></script>	
+</body>
+</html>
