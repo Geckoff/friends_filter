@@ -1,5 +1,12 @@
-import Columns from './modules/columns.js';
-import VkCore from './modules/vkcore.js';
+import {
+	columnsLayout,
+	getInitialData,
+	saveToStorage
+} from './modules/columns.js';
+import {
+	vkInit,
+	logout	
+} from './modules/vkcore.js';
 require("babel-polyfill");
 
 const jsCookie = require('js-cookie'),
@@ -8,10 +15,7 @@ const jsCookie = require('js-cookie'),
 	  contentBlock = document.querySelector('.content'),
  	  unlistedFriendsListNode = document.querySelector('#all-friends ul'),
 	  listedFriendsListNode = document.querySelector('#picked-friends ul'),
-	  friendsListsNodes = [unlistedFriendsListNode, listedFriendsListNode],
-
- 	  columns = Columns(),
-  	  vkCore = VkCore();
+	  friendsListsNodes = [unlistedFriendsListNode, listedFriendsListNode];
 
 toastr.options = {
   "closeButton": false,
@@ -49,7 +53,7 @@ contentBlock.addEventListener('click', (e) => {
 		let elementToAdd = e.target.closest('li');
 		let addRemove = elementToAdd.querySelector('span').classList[0];
 		let userId = elementToAdd.dataset.id;
-		columns.columnsLayout(friendsListsNodes, addRemove, userId);
+		columnsLayout(friendsListsNodes, addRemove, userId);
 	 } 
 }); 
  
@@ -81,9 +85,9 @@ friendsListsNodes.forEach((ulList) => {
 
 		if (listType !== currentListType) {
 			if (listType === 'all-friends') {
-				columns.columnsLayout(friendsListsNodes, 'add', friendId);
+				columnsLayout(friendsListsNodes, 'add', friendId);
 			} else {
-				columns.columnsLayout(friendsListsNodes, 'remove', friendId);
+				columnsLayout(friendsListsNodes, 'remove', friendId);
 			}
 		}		
 	});	
@@ -92,15 +96,15 @@ friendsListsNodes.forEach((ulList) => {
 // search fields
 document.querySelector('.header-bottom').addEventListener('keyup', (e) => {
 	if (e.target.id === 'search-all-friends') {
-		columns.columnsLayout(friendsListsNodes, 'allUsersSearch', e.target.value); 
+		columnsLayout(friendsListsNodes, 'allUsersSearch', e.target.value); 
 	} else if (e.target.id ===  'search-picked-friends') {
-		columns.columnsLayout(friendsListsNodes, 'listedUsersSearch', e.target.value); 
+		columnsLayout(friendsListsNodes, 'listedUsersSearch', e.target.value); 
 	}	
 });
 
 // saving picked friends list
 document.getElementById('savelist').addEventListener('click', () => {
-	columns.saveToStorage();
+	saveToStorage();
 	toastr.success('List has been saved');
 });
 
@@ -108,13 +112,13 @@ document.getElementById('savelist').addEventListener('click', () => {
 // @param {rigthAway} bool - whether in previous session VK logout was made (false), or VK connection was not terminated (true)
 async function vkStart(rigthAway){  
     try {    		    
-	    let response = await vkCore.vkInit();	    	
+	    let response = await vkInit();	    	
 		jsCookie.set('vk_auth', 'true', { expires: 1 });	
-	    columns.getInitialData(response); 
+	    getInitialData(response); 
 
 		await (async function(){
 			new Promise((resolve, reject) => {
-		     	columns.columnsLayout(friendsListsNodes); 
+		     	columnsLayout(friendsListsNodes); 
 		     	resolve();   
 		    });
 		})();
@@ -137,7 +141,7 @@ async function vkStart(rigthAway){
 // VK logout
 async function vkLogout() {
 	changeAuthorised(false);
-	await vkCore.logout();
+	await logout();
 	jsCookie.set('vk_auth', 'false', { expires: 30 });
 }
 
