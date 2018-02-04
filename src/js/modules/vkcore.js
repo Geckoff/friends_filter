@@ -30,6 +30,8 @@ let logout = function() {
 
 let callAPI = function(method, params) {
     return new Promise((resolve, reject) => {
+        params.v = '5.69';
+
         VK.api(method, params, (response) => {
             if (response.error) {
                 reject(response.error);
